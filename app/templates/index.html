@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Escape the Death Star!</title>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.7/css/all.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap">
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    </head>
+    <body>
+        <div id='main' class='container fade-in' style='top: 50%;'>
+            <h1 class='center'>Escape from the Death Star!</h1>
+            <p>
+                For the final puzzle you will have to correctly match
+                sheet music excerpts to the corresponding audio.
+                There are five questions and you must get them 
+                all correct. You get two guesses per question.
+            </p>
+            <div class='center' style="padding-top: 1rem;">
+                <input type="text" id='password' placeholder="enter the password" autofocus='true'>
+                <input type='submit' id='submit' onClick='checkAnswer()'>
+            </div>
+        </div>
+        <script>
+
+            var input = document.getElementById('password');
+            input.addEventListener('keyup', function(event) {
+                if (event.keyCode == 13) {
+                    event.preventDefault();
+                    document.getElementById('submit').click();
+                }
+            });
+
+            function checkAnswer() {
+                let password = document.getElementById('password').value.toLowerCase().trim();
+                if (password === 'tatooine') {
+                    document.getElementById('main').classList.add('fade-out');
+                    setTimeout(() => {
+                        window.location.replace("{{ url_for('quiz') }}");
+                    }, 550);
+                } else if (password === '') {
+                    window.alert('come on, you have to at least try!')
+                } else {
+                    window.alert("sorry, that's incorrect; there might a clue lying around somewhere...");
+                    window.location.replace("{{ url_for('index') }}");
+                }
+            }
+
+        </script>
+    </body>

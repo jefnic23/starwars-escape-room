@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Escape the Death Star!</title>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.7/css/all.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap">
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+        <script type='text/javascript'>
+            var pics = {{ pics | tojson }};
+            var answers = {{ answers | tojson }};
+            var music = {{ music | tojson }};
+        </script>
+        <script type="text/javascript" src="{{ url_for('static', filename='scripts.js') }}"></script>
+        <script type='text/javascript'>
+            var questions = populateQuestions(answers);
+            var current_question = 0;
+            var correct = 0;
+            var guesses = 0;
+            var progress = 0;
+            var audio_played = false;
+        </script>
+    </head>
+    <body>
+        <div id='main' class='fade-in'>
+            <div class='center' style='padding-top: 1rem;'>
+                <h2 class='center'>
+                    Click the play button to begin listening<br>
+                    then click the matching sheet music
+                </h2>
+                <div style='padding-top: 1rem; width: 100%; display: block;'>
+                    <span class='arrow-container'><i id="play_audio" class="far fa-play-circle stopped" onclick="playAudio();"></i></span>
+                    <audio id="audio" loop>
+                        <source id="clip" src="" type="audio/ogg">
+                    </audio>
+                </div>
+            </div>
+            <div class='quiz-container'>
+                <div class='flex-container'>
+                    <div class='excerpt-disabled'>
+                        <i id='icon1'></i>
+                        <img id='answer1' src="">
+                    </div>
+                    <div class='excerpt-disabled'>
+                        <i id='icon2'></i>
+                        <img id='answer2' src="">
+                    </div>
+                    <div class='excerpt-disabled'>
+                        <i id='icon3'></i>
+                        <img id='answer3' src="">
+                    </div>
+                    <div class='excerpt-disabled'>
+                        <i id='icon4'></i>
+                        <img id='answer4' src="">
+                    </div>
+                </div>
+            </div>
+            <div class='progress'>
+                <span id='progressbar' style='width: 0%'></span>
+            </div>
+        </div>
+        <script>
+            
+            var c = document.body.childNodes[1]['children'][1]['children'][0]['children'];
+            var bar = document.getElementById('progressbar');
+            var audio = document.getElementById('audio');
+            var play_audio = document.getElementById('play_audio');
+
+            document.getElementById('clip').src = 'static/' + music[current_question];
+            for (var i=0; i < c.length; i++) {
+                c[i]['children'][1].className = '';
+                c[i]['children'][1].src = 'static/' + questions[current_question][i];
+            }
+
+            audio.onplaying = () => {
+                if (!audio_played) {
+                    enableExcerpts();
+                    audio_played = true;
+                } 
+            }
+
+        </script>
+    </body>

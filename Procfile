@@ -1,0 +1,1 @@
+web: gunicorn escape_room:app --preload
